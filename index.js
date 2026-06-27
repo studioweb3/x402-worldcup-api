@@ -1,5 +1,5 @@
 import express from 'express';
-import { x402 } from '@x402/express';
+import x402 from '@x402/express';
 
 const app = express();
 
