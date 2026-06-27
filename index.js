@@ -5,12 +5,12 @@ import { HTTPFacilitatorClient } from '@x402/core/server';
 
 const app = express();
 
-// 1. On se connecte au contrôleur de paiement officiel x402
+// 1. Connexion au contrôleur de paiement officiel
 const facilitatorClient = new HTTPFacilitatorClient({ 
   url: 'https://x402.org/facilitator' 
 });
 
-// 2. Le véritable péage Web3
+// 2. Le péage Web3
 app.use(
   paymentMiddleware(
     {
@@ -19,8 +19,8 @@ app.use(
           {
             scheme: 'exact',
             price: '$0.05', 
-            network: 'eip155:8453', // Code officiel du réseau Base Mainnet (Mettez 84532 si c'est Sepolia testnet)
-            payTo: '0x18799902c24dEe7F499205f9e647C69e97EB193B', // <-- 🔴 REMETTEZ VOTRE VRAIE ADRESSE ICI
+            network: 'eip155:8453', // Code officiel du réseau Base
+            payTo: '0x18799902c24dEe7F499205f9e647C69e97EB193B', // <-- 🔴 METTEZ VOTRE VRAIE ADRESSE ICI
           },
         ],
         description: 'Data Premium Coupe du Monde',
