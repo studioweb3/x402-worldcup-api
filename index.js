@@ -5,7 +5,7 @@ const app = express();
 
 // Le péage Web3
 app.use('/api/premium', x402({
-  payee: '0xVOTRE_ADRESSE_PUBLIQUE_ICI' // 🔴 METTEZ VOTRE ADRESSE 0x... ICI
+  payee: '0x18799902c24dEe7F499205f9e647C69e97EB193B' // 🔴 METTEZ VOTRE ADRESSE 0x... ICI
 }));
 
 // La donnée qui sera débloquée après le paiement
