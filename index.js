@@ -1,6 +1,10 @@
 import express from 'express';
 import x402 from '@x402/express';
 
+// La technique du passe-partout
+const x402 = x402Lib.x402 || x402Lib.default || x402Lib;
+
+
 const app = express();
 
 // Le péage Web3 (Mettez bien votre adresse ici !)
