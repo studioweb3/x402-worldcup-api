@@ -1,23 +1,40 @@
 import express from 'express';
-import { createRequire } from 'module';
-
-// 1. On recrée l'ancien système d'importation
-const require = createRequire(import.meta.url);
-
-// 2. On importe TOUTE la librairie dans une boîte
-const x402Lib = require('@x402/express');
-
-// 3. On extrait la fonction (soit elle s'appelle x402, soit on prend la fonction par défaut)
-const x402Middleware = x402Lib.x402 || x402Lib.default || x402Lib;
+import { paymentMiddleware, x402ResourceServer } from '@x402/express';
+import { ExactEvmScheme } from '@x402/evm/exact/server';
+import { HTTPFacilitatorClient } from '@x402/core/server';
 
 const app = express();
 
-// 4. On utilise la fonction de péage
-app.use('/api/premium', x402Middleware({
-  payee: '0x18799902c24dEe7F499205f9e647C69e97EB193B' // <-- 🔴 REMETTEZ VOTRE VRAIE ADRESSE ICI
-}));
+// 1. On se connecte au contrôleur de paiement officiel x402
+const facilitatorClient = new HTTPFacilitatorClient({ 
+  url: 'https://x402.org/facilitator' 
+});
 
-// La donnée qui sera débloquée après le paiement
+// 2. Le véritable péage Web3
+app.use(
+  paymentMiddleware(
+    {
+      'GET /api/premium': {
+        accepts: [
+          {
+            scheme: 'exact',
+            price: '$0.05', 
+            network: 'eip155:8453', // Code officiel du réseau Base Mainnet (Mettez 84532 si c'est Sepolia testnet)
+            payTo: '0x18799902c24dEe7F499205f9e647C69e97EB193B', // <-- 🔴 REMETTEZ VOTRE VRAIE ADRESSE ICI
+          },
+        ],
+        description: 'Data Premium Coupe du Monde',
+        mimeType: 'application/json',
+      },
+    },
+    new x402ResourceServer(facilitatorClient).register(
+      'eip155:8453', 
+      new ExactEvmScheme()
+    )
+  )
+);
+
+// 3. Vos données secrètes
 app.get('/api/premium', (req, res) => {
   res.json({
     statut: "Succès",
