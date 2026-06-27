@@ -1,14 +1,17 @@
 import express from 'express';
-import * as x402Lib from '@x402/express';
+import { createRequire } from 'module';
 
-// On utilise un nom différent (x402Middleware) pour éviter les doublons
-const x402Middleware = x402Lib.x402 || x402Lib.default || x402Lib;
+// 1. On recrée le traducteur de l'ancienne école
+const require = createRequire(import.meta.url);
+
+// 2. On importe x402 avec son système natif
+const { x402 } = require('@x402/express');
 
 const app = express();
 
-// Le péage Web3
-app.use('/api/premium', x402Middleware({
-  payee: '0x18799902c24dEe7F499205f9e647C69e97EB193B' // <-- 🔴 N'OUBLIEZ PAS DE REMETTRE VOTRE VRAIE ADRESSE ICI
+// 3. Le péage Web3
+app.use('/api/premium', x402({
+  payee: '0x18799902c24dEe7F499205f9e647C69e97EB193B' // <-- 🔴 REMETTEZ VOTRE VRAIE ADRESSE ICI AVEC LES GUILLEMETS
 }));
 
 // La donnée qui sera débloquée après le paiement
