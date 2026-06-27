@@ -1,6 +1,7 @@
 import { createWalletClient, custom } from 'viem';
 import { base } from 'viem/chains';
-import x402fetch from '@x402/fetch';
+import * as x402Lib from '@x402/fetch';
+const x402fetch = x402Lib.x402Fetch || x402Lib.fetch || x402Lib.default || x402Lib;
 
 const connectBtn = document.getElementById('connectBtn');
 const buyBtn = document.getElementById('buyBtn');
